@@ -1,0 +1,24 @@
+language: python
+python: 3.6.1
+
+matrix:
+  fast_finish: true
+
+
+dist: trusty
+sudo: required
+
+cache:
+  timeout: 43200 # 12 hours
+  pip: true
+
+services:
+  - neo4j
+
+install: pip install -r requirements.txt
+
+script:
+  - coverage run -m pytest
+  - coverage xml
+  - coverage report
+  - python-codacy-coverage -r coverage.xml
