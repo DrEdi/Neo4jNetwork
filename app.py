@@ -1,7 +1,4 @@
-import random
-
 from neo4j.v1 import GraphDatabase
-
 
 
 class NeoConnector:
@@ -111,7 +108,7 @@ class NeoConnector:
         with self.driver.session() as session:
             info = session.run("MATCH (p:User) WHERE p.sex='m' RETURN p.name"
                                " AS name, p.age AS age ORDER BY p.age DESC")
-        return [{'name': i['name'], 'age': i['age']} for i in info]
+        return [{i['name']: i['age']} for i in info]
 
     def get_person_friends(self, name):
         """Return list of names that have given person.
@@ -241,30 +238,3 @@ class NeoConnector:
                                "-(ff:User) WHERE n.name={x} RETURN ff.name AS"
                                " name,  ff.posts AS posts", x=name)
         return [{i['name']: i['posts']} for i in data]
-
-
-if __name__ == '__main__':
-    conn = NeoConnector()
-
-    # users = ['Liza', 'Megan', 'Alex', 'Bob', 'Josh', 'Frod', 'Naomi', 'Jack',
-    #          'Den', 'Kalvin']
-    # groups = ['Marvel Community', 'Lurkmore', 'KPI Alumni']
-    # for i, val in enumerate(users):
-    #     conn.add_person(val, 'f' if i <= 1 else 'm', random.randint(11, 85),
-    #                     ['.'*random.randint(1, 40) for j
-    #                      in range(1, random.randint(1,10))])
-    #
-    # for i in groups:
-    #     conn.add_group(i)
-    #
-    # for i in users:
-    #     import random
-    #     conn_count = random.randint(1, 3)
-    #     for _ in range(conn_count):
-    #         u2 = random.randint(0, len(users)-1)
-    #         if i == users[u2]:
-    #             u2 = u2+1
-    #         conn.add_connection(i, users[u2])
-    #         conn.add_connection(users[u2], i)
-    #     conn.add_subscriber(i, groups[random.randint(0, len(groups)-1)])
-
